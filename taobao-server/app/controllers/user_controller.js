@@ -64,7 +64,7 @@ const register = async (ctx, next) => {
       msg: '用户注册失败！'
     }
   }
-
+dff1
 }
 module.exports = {
   login,
