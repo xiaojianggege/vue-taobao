@@ -5,9 +5,45 @@ const user_col = require('../models/user')
 const password_col = require('../models/password')
 const { v1: uuidv1} = require('uuid') // 引入uuid 给每个注册用户设置一个时间戳的userId
 const md5 = require('md5') // 使用md5给每个用户密码进行加密
+const { findOne } = require('../models/user')
+
 // 登录
 const login = async (ctx, next) => {
-  
+  // 先取用户传来的数据
+  const req = ctx.request.body
+  // 对其进行查询
+  const query = await user_col.findOne(
+    {
+      userName: req.userName
+    }
+  )
+  ctx.status = 200
+  if(query) { // 用户名存在的情况下
+    let userId = query.userId
+    let hash = md5(req.password)
+    let pwd = await password_col.findOne({
+      userId
+    })
+    if(pwd.hash === hash) {
+      ctx.body = {
+        code: 1,
+        msg: '用户登录成功',
+        data: query
+      }
+    }else {
+      ctx.body = {
+        code: 0,
+        msg: '密码输入错误',
+        data: 'error'
+      }
+    }
+  } else {
+    ctx.body = {
+      code: 0,
+      msg: '用户名不存在',
+      data: 'error'
+    }
+  }
 }
 
 
@@ -30,7 +66,7 @@ const register = async (ctx, next) => {
     }
     return
   }
-  const useId = uuidv1()
+  const userId = uuidv1()
   const newUser = await user_col.create({
     userId,
     userName: req.userName
@@ -40,7 +76,7 @@ const register = async (ctx, next) => {
   //   hash 
   // })
   if(newUser) {
-    const hash = await md5(req.password)
+    const hash = md5(req.password)
     const newPass = await password_col.create({
        userId,
        hash 
@@ -57,14 +93,12 @@ const register = async (ctx, next) => {
         msg: '密码存储失败！'
       }
     }
-    
   } else {
     ctx.body = {
       code: 0,
       msg: '用户注册失败！'
     }
   }
-dff1
 }
 module.exports = {
   login,

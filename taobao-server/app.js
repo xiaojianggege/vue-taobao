@@ -3,7 +3,7 @@
 const Koa = require('koa') // 引入koa框架 
 
 const cors = require('koa2-cors') // 引用koa2-cors，处理跨域问题
-
+const bodyparser = require('koa-bodyparser') // 
 const mongoose = require('mongoose') // 连接mongoDB
 
 const config = require('./config')  // 引入配置文件
@@ -20,6 +20,11 @@ mongoose.connect(config.db, {useNewUrlParser: true}, (err) => {
 })
 
 app.use(cors()) // 允许任何条件的跨域
+app.use(
+  bodyparser({
+    enableTypes: ['json', 'form', 'text']
+  })
+)
 
 const user_router = require('./routes/api/user_router')
 
