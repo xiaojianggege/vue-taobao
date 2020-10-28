@@ -5,5 +5,5 @@ const router = new Router()
 
 router.post('/login', user_controller.login)
 router.post('/register', user_controller.register)
-
+router.get('/channel', user_controller.getChannel)
 module.exports = router
