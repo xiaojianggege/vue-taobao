@@ -32,10 +32,16 @@ export default {
   display flex
   flex-direction column
   align-items center
+  justify-content center
+  width 20%
+  margin-bottom 6px
   .pic
+    width 20%
+    display flex
+    justify-content center
     img
-      width 40px 
+      width 32px 
   .title
-    margin-top 4px
+    margin-top 8px
     font-size 12px
 </style>

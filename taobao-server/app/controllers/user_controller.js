@@ -6,7 +6,7 @@ const password_col = require('../models/password')
 const channel_col = require('../models/channel')
 const { v1: uuidv1} = require('uuid') // 引入uuid 给每个注册用户设置一个时间戳的userId
 const md5 = require('md5') // 使用md5给每个用户密码进行加密
-const { findOne } = require('../models/user')
+const jwtTool = require('../../utils/jwtTool')
 
 // 登录
 const login = async (ctx, next) => {
@@ -26,7 +26,9 @@ const login = async (ctx, next) => {
       userId
     })
     if(pwd.hash === hash) {
+      let token = await jwtTool.createToken(req) // 登录成功的令牌
       ctx.body = {
+        token,
         code: 1,
         msg: '用户登录成功',
         data: query
@@ -51,6 +53,7 @@ const login = async (ctx, next) => {
 // 注册
 const register = async (ctx, next) => {
   const req = ctx.request.body // 获取用户传递来的数据
+  console.log(req);
   // 先对数据库进行查询 是否已经存在要注册的用户名
   const query = await user_col.findOne({
     userName: req.userName
@@ -82,7 +85,9 @@ const register = async (ctx, next) => {
        hash 
     })
     if(newPass) {
+      let token = await jwtTool.createToken(req) // 登录成功的令牌
       ctx.body = {
+        token,
         code: 1,
         msg: '用户注册成功',
         data: newUser
@@ -101,6 +106,7 @@ const register = async (ctx, next) => {
   }
 }
 
+// 获取页面频道接口
 const getChannel = async (ctx, next) => {
   await channel_col.find().then(res => {
     ctx.body = {

@@ -3,7 +3,7 @@
 const Koa = require('koa') // 引入koa框架 
 
 const cors = require('koa2-cors') // 引用koa2-cors，处理跨域问题
-const bodyparser = require('koa-bodyparser') // 
+const bodyparser = require('koa-bodyparser') // 参数解析
 const mongoose = require('mongoose') // 连接mongoDB
 
 const config = require('./config')  // 引入配置文件

@@ -6,23 +6,43 @@
       <span v-show="isRegister" class="register" @click="register">立即注册</span>
     </div>
     <div class="input">
-      <input v-if="isRegister" type="text" placeholder="请输入手机号码/会员名/邮箱">
-      <input v-else type="text" placeholder="请输入手机号码">
+      <input v-if="isRegister" type="text" v-model="userName" placeholder="请输入手机号码/会员名/邮箱">
+      <input v-else  v-model="userName" type="text" placeholder="请输入手机号码">
+      <input type="text" placeholder="请输入密码" v-model="password">
     </div>
-    <div class="comfirm_btn">确认</div>
+    <div v-if="isRegister" class="comfirm_btn" @click="login">确认登录</div>
+    <div v-else class="comfirm_btn" @click="ToRegister">确认注册</div>
   </div>
 </template>
-
 <script>
+import api from '@/api/index.js'
 export default {
   data() {
     return {
-      isRegister: true
+      isRegister: true,
+      userName: undefined,
+      password: undefined
     }
   },
   methods: {
     register() {
       this.isRegister = !this.isRegister
+    },
+    login() {
+      api.Login({
+        userName: this.userName,
+        password: this.password
+      }).then(res => {
+        console.log(res);
+      })
+    },
+    ToRegister() {
+      api.Register({
+        userName: this.userName,
+        password: this.password
+      }).then(res => {
+        console.log(res);
+      })
     }
   }
 }
@@ -37,7 +57,6 @@ export default {
     font-size 28px
     margin 100px 0 20px 0
     color #000000
-
   .title_info
     margin-bottom 40px
     // font-size 15px
@@ -50,6 +69,8 @@ export default {
     input
       width 100%
       caret-color #FF4400
+    > input:last-child
+      margin-top 6px
   .comfirm_btn
     margin-top 40px
     width 100%

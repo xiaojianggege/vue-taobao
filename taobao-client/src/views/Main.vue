@@ -7,7 +7,7 @@
       </van-search>
       <i class="iconfont icon-huiyuanma"></i>
     </div>
-  
+    <swiper />
     <!-- 频道banner栏 -->
     <div class="banner"> 
         <channel v-for="(item, index) in channelList" :key="index" :channel="item" >
@@ -19,10 +19,12 @@
 
 <script>
 import channel from '@/components/Channel'
+import swiper from '@/components/swiper'
 import api from '@/api/index'
 export default {
   components: {
-    channel: channel
+    channel,
+    swiper
   },
   data() {
     return {
@@ -64,7 +66,9 @@ export default {
       color #FC482E
       font-size 26px
   .banner
-    padding 6px
+    padding 6px 0
     display flex
-    flex-wrap nowrap
+    flex-wrap wrap
+    justify-content space-between
+    align-items baseline
 </style>
